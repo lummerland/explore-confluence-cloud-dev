@@ -1,0 +1,12 @@
+# Atlassian Connect App using Express
+
+Congratulations!
+You've successfully created an Atlassian Connect App using the Express web application framework.
+
+## What's next?
+
+[Read the docs](https://bitbucket.org/atlassian/atlassian-connect-express/src/master/README.md).
+
+* Explore possibilities to use Confluence API
+* Make example app work
+* Explore ways to put app into production mode -> put app to cloud service like Heroku, GCP or AWS
