@@ -1,0 +1,36 @@
+{
+    "key": "hashtags",
+    "name": "Hashtags for Confluence Cloud",
+    "description": "Add labels using hastags during page creation",
+    "baseUrl": "{{localBaseUrl}}",
+    "authentication": {
+        "type": "jwt"
+    },
+    "lifecycle": {
+        "installed": "/installed"
+    },
+    "scopes": [
+        "READ", "WRITE"
+    ],
+    "modules": {
+        "generalPages": [
+            {
+                "key": "hashtags-page-confluence",
+                "location": "system.header/left",
+                "name": {
+                    "value": "Hello Hashtags"
+                },
+                "url": "/hashtags",
+                "conditions": [{
+                    "condition": "user_is_logged_in"
+                }]
+            }
+        ],
+        "webhooks": [
+            {
+                "event": "page_updated",
+                "url": "page_updated"
+            }
+        ]
+    }
+}
