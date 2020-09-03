@@ -22,44 +22,17 @@ export default function routes(app, addon) {
     });
 
     app.post('/page_updated', addon.authenticate(), (req, res) => {
-      
-      console.dir(addon.config);
 
-      var confluence = require("./lib/confluence")(addon.httpClient(req));
-      var axios = require('axios');
-
-      confluence.getContent(req.body.page.id).then((content) => {
-        console.log(content);
-        var xhtmlContent = content.body.value;
-        var hashtags = xhtmlContent.match(/#[\w-]+/g)
-        hashtags.forEach(element => {
-          console.log("Hastag found: " + element);
-          
-          axios({
-            method: 'get',
-            header: [ 'Accept: application/json', 'Content-Type: application/json' ],
-            url: `https://lummerland-dev.atlassian.net/wiki/rest/api/content/${req.body.page.id}/label`
-          }).then(response => {
-            console.log(response)
-          }).catch(error => {
-            console.log(error)
-          })
-          
-          axios({
-            method: 'post',
-            header: [ 'Accept: application/json', 'Content-Type: application/json' ],
-            url: `${addon.config.baseUrl.href}wiki/rest/api/content/${req.body.page.id}/label`,
-            data: {
-              "prefix": "global",
-              "name": element.substring(1)
-            }
-          }).then(response => {
-            console.log(response)
-          }).catch(error => {
-            console.log(error)
-          })
-        });
-      })
+        const confluence = require("./lib/confluence")(addon.httpClient(req));
+        confluence.getContent(req.body.page.id).then((content) => {
+            let xhtmlContent = content.body.value;
+            let hashtags = xhtmlContent.match(/#[\w-]+/g)
+            confluence.setLabels(req.body.page.id, hashtags).then(response => {
+                console.log(response)
+            }).catch(error => {
+                console.log(error)
+            });
+        })
 
     })
 }

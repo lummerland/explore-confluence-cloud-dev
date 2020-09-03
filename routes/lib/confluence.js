@@ -15,6 +15,26 @@ proto.getContent = function (pageId) {
   });
 };
 
+proto.getLabels = function (pageId) {
+  return invoke(this.http, "get", {
+    uri: `/rest/api/content/${pageId}/label`,
+  });
+}
+
+proto.setLabels = function (pageId, labels) {
+  let requestBody = _.map(labels, label => {
+    return { "prefix": "global", "name": label.substring(1)}
+  })
+  return invoke(this.http, "post", {
+    uri: `/rest/api/content/${pageId}/label`,
+    headers: {
+      Accept: "application/json",
+      "X-Atlassian-Token": "nocheck"
+    },
+    body: requestBody
+  });
+}
+
 function invoke(http, method, options) {
   options.json = true;
   var dfd = Q.defer();
